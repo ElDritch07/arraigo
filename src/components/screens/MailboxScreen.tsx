@@ -67,7 +67,9 @@ export function MailboxScreen() {
             e.preventDefault()
             submit()
           }}
-          className="mb-5 space-y-4 rounded-control border border-accent/50 bg-accent-soft/40 p-4"
+          className={`mb-5 space-y-4 rounded-control border p-4 ${
+            kind === 'queja' ? 'border-queja-strong/40 bg-queja-bg/50' : 'border-sug-strong/40 bg-sug-bg/60'
+          }`}
         >
           <fieldset>
             <legend className="mb-1.5 text-base font-medium">{t('mb.kind')}</legend>
@@ -75,11 +77,18 @@ export function MailboxScreen() {
               {KINDS.map((k) => (
                 <label
                   key={k}
-                  className={`flex min-h-11 cursor-pointer items-center justify-center rounded-control border px-3 text-base font-medium has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent ${
-                    kind === k ? 'border-accent bg-accent text-white' : 'border-line bg-surface text-ink'
+                  className={`flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-control border px-3 text-base font-medium has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent ${
+                    kind === k
+                      ? k === 'queja'
+                        ? 'border-queja-strong bg-queja-strong text-white'
+                        : 'border-sug-strong bg-sug-strong text-white'
+                      : k === 'queja'
+                        ? 'border-queja-strong/40 bg-queja-bg text-queja-fg'
+                        : 'border-sug-strong/40 bg-sug-bg text-sug-fg'
                   }`}
                 >
                   <input type="radio" name="report-kind" className="sr-only" checked={kind === k} onChange={() => setKind(k)} />
+                  {k === 'queja' ? <AlertCircle size={18} aria-hidden /> : <Lightbulb size={18} aria-hidden />}
                   {k === 'queja' ? t('mb.complaint') : t('mb.suggestion')}
                 </label>
               ))}
@@ -164,7 +173,8 @@ export function MailboxScreen() {
           <AnimatePresence initial={false}>
             {list.slice(0, 40).map((r) => {
               const backed = hasBacked(r.id)
-              const Icon = r.kind === 'queja' ? AlertCircle : Lightbulb
+              const isQueja = r.kind === 'queja'
+              const Icon = isQueja ? AlertCircle : Lightbulb
               return (
                 <motion.li
                   key={r.id}
@@ -173,30 +183,45 @@ export function MailboxScreen() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                  className="rounded-control border border-line bg-surface p-3"
+                  className="flex gap-3 rounded-control border border-line bg-surface p-3"
                 >
-                  <p className="mb-1.5 flex flex-wrap items-center gap-2 text-sm">
-                    <span className="inline-flex items-center gap-1.5 rounded-md bg-accent-soft px-2 py-0.5 font-medium text-accent-strong">
-                      <Icon size={14} aria-hidden />
-                      {r.kind === 'queja' ? t('mb.complaint') : t('mb.suggestion')}
-                    </span>
-                    <span className="text-muted">{byId.get(r.barrioId)?.name}</span>
-                  </p>
-                  <h2 className="text-base font-semibold leading-snug">{eventTitle(r, td)}</h2>
-                  {(r.description || r.titleKey) && (
-                    <p className="mt-1 text-sm text-muted">{r.description ?? t('seed.rep.desc')}</p>
-                  )}
-                  {r.photo && <img src={r.photo} alt={t('mb.photo.alt')} className="mt-2 max-h-48 w-full rounded-control object-cover" />}
-                  <Button
-                    variant={backed ? 'primary' : 'secondary'}
-                    aria-pressed={backed}
-                    className="mt-3 w-full"
-                    onClick={() => requireAccount(() => toggleBack(r.id))}
+                  <span
+                    className={`flex size-11 shrink-0 items-center justify-center rounded-full ${
+                      isQueja ? 'bg-queja-bg text-queja-fg' : 'bg-sug-bg text-sug-fg'
+                    }`}
+                    aria-hidden="true"
                   >
-                    <Megaphone size={18} aria-hidden />
-                    {backed ? t('mb.alsoDone') : t('mb.also')}
-                    <span className="tabular-nums opacity-80">{r.backs}</span>
-                  </Button>
+                    <Icon size={22} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="mb-1 flex flex-wrap items-center gap-x-2 text-sm">
+                      <span className={`font-semibold ${isQueja ? 'text-queja-fg' : 'text-sug-fg'}`}>
+                        {isQueja ? t('mb.complaint') : t('mb.suggestion')}
+                      </span>
+                      <span className="text-muted">{byId.get(r.barrioId)?.name}</span>
+                    </p>
+                    <h2 className="text-lg font-semibold leading-snug">{eventTitle(r, td)}</h2>
+                    {(r.description || r.titleKey) && (
+                      <p className="mt-1 text-sm text-muted">{r.description ?? t('seed.rep.desc')}</p>
+                    )}
+                    {r.photo && <img src={r.photo} alt={t('mb.photo.alt')} className="mt-2 max-h-48 w-full rounded-control object-cover" />}
+                    <Button
+                      variant="secondary"
+                      aria-pressed={backed}
+                      className={`mt-3 w-full ${
+                        backed
+                          ? isQueja
+                            ? '!border-transparent !bg-queja-strong !text-white hover:!bg-queja-strong'
+                            : '!border-transparent !bg-sug-strong !text-white hover:!bg-sug-strong'
+                          : ''
+                      }`}
+                      onClick={() => requireAccount(() => toggleBack(r.id))}
+                    >
+                      <Megaphone size={18} aria-hidden />
+                      {backed ? t('mb.alsoDone') : t('mb.also')}
+                      <span className="tabular-nums opacity-80">{r.backs}</span>
+                    </Button>
+                  </div>
                 </motion.li>
               )
             })}

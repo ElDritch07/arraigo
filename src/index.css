@@ -35,6 +35,13 @@
   --color-bloom: #d6453d;
   --color-berry: #e08a2c;
 
+  --color-queja-bg: #fde8e4;
+  --color-queja-fg: #8a2c1d;
+  --color-queja-strong: #b23a26;
+  --color-sug-bg: #e3eff7;
+  --color-sug-fg: #1b4f73;
+  --color-sug-strong: #2b6f9e;
+
   --color-st-presented-bg: #eceff1;
   --color-st-presented-fg: #3b4750;
   --color-st-review-bg: #fff1d6;

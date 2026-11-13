@@ -69,7 +69,7 @@ export function EventBoard({ eventId }: { eventId: string }) {
 
   return (
     <section aria-labelledby="board-h">
-      <h3 id="board-h" className="flex items-center gap-2 text-base font-semibold">
+      <h3 id="board-h" className="flex items-center gap-2 text-lg font-semibold">
         <MessagesSquare size={18} className="text-accent" aria-hidden />
         {t('bd.title')}
         <span className="text-sm font-normal text-muted">({t('bd.count', { n: posts.length })})</span>

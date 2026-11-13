@@ -1,4 +1,4 @@
-import { Play } from 'lucide-react'
+import { Play, QrCode } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 import { useT } from '../../i18n'
@@ -72,7 +72,7 @@ function MyActivity() {
   return (
     <>
       <section className="mb-5" aria-labelledby="joined-h">
-        <h2 id="joined-h" className="mb-2 text-base font-semibold">
+        <h2 id="joined-h" className="mb-3 text-lg font-semibold">
           {t('pf.joined.title')}
         </h2>
         {list(
@@ -104,7 +104,7 @@ function MyActivity() {
       </section>
 
       <section className="mb-5" aria-labelledby="saved-h">
-        <h2 id="saved-h" className="mb-2 text-base font-semibold">
+        <h2 id="saved-h" className="mb-3 text-lg font-semibold">
           {t('pf.saved.title')}
         </h2>
         {list(
@@ -115,7 +115,7 @@ function MyActivity() {
 
       {created.length > 0 && (
         <section className="mb-5" aria-labelledby="created-h">
-          <h2 id="created-h" className="mb-2 text-base font-semibold">
+          <h2 id="created-h" className="mb-3 text-lg font-semibold">
             {t('pf.created.title')}
           </h2>
           {list(
@@ -199,7 +199,7 @@ export function ProfileScreen() {
       {user && <MyActivity />}
 
       <section className="mb-5" aria-labelledby="how-h">
-        <h2 id="how-h" className="mb-2 text-base font-semibold">
+        <h2 id="how-h" className="mb-3 text-lg font-semibold">
           {t('pf.how')}
         </h2>
         <ul className="divide-y divide-line rounded-control border border-line bg-surface">
@@ -223,7 +223,7 @@ export function ProfileScreen() {
 
       {user && (
         <section className="mb-5" aria-labelledby="act-h">
-          <h2 id="act-h" className="mb-2 text-base font-semibold">
+          <h2 id="act-h" className="mb-3 text-lg font-semibold">
             {t('pf.activity')}
           </h2>
           <dl className="grid grid-cols-3 gap-2 text-center">
@@ -242,14 +242,14 @@ export function ProfileScreen() {
       )}
 
       <section className="mb-5" aria-labelledby="lang-h">
-        <h2 id="lang-h" className="mb-2 text-base font-semibold">
+        <h2 id="lang-h" className="mb-3 text-lg font-semibold">
           {t('pf.language')}
         </h2>
         <LanguageChips />
       </section>
 
       <section className="mb-5" aria-labelledby="sup-h">
-        <h2 id="sup-h" className="mb-1 text-base font-semibold">
+        <h2 id="sup-h" className="mb-1 text-lg font-semibold">
           {t('pf.support')}
         </h2>
         <p className="mb-3 text-base text-muted">{t('pf.support.text')}</p>
@@ -273,6 +273,10 @@ export function ProfileScreen() {
         <Button variant="secondary" className="w-full" onClick={() => tour.start()}>
           <Play size={18} aria-hidden />
           {t('tour.start')}
+        </Button>
+        <Button variant="secondary" className="mt-3 w-full" onClick={() => openModal({ type: 'qr' })}>
+          <QrCode size={18} aria-hidden />
+          {t('pf.qr')}
         </Button>
       </section>
 

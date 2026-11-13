@@ -112,13 +112,13 @@ export function EventDetail({ id }: { id: string }) {
         </ul>
 
         <section>
-          <h3 className="mb-1 text-base font-semibold">{t('ev.about')}</h3>
+          <h3 className="mb-1 text-lg font-semibold">{t('ev.about')}</h3>
           <p className="text-base text-muted">{description}</p>
         </section>
 
         {event.mine ? (
           <section aria-labelledby="att-h" className="space-y-3 rounded-control border border-line p-3">
-            <h3 id="att-h" className="text-base font-semibold">
+            <h3 id="att-h" className="text-lg font-semibold">
               {t('ev.attendeesTitle')}
             </h3>
             <p className="text-sm text-muted">{t('ev.attendees.hint')}</p>

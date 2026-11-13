@@ -16,6 +16,7 @@ import { CreateEventFlow } from './CreateEventFlow'
 import { DropletIcon } from './DropletIcon'
 import { EventDetail } from './EventDetail'
 import { LanguageDialog } from './LanguageDialog'
+import { QrDialog } from './QrDialog'
 import { MapView } from './MapView'
 import { ScopeBar } from './ScopeBar'
 import { ScopePicker } from './ScopePicker'
@@ -269,6 +270,7 @@ export function Shell({ data }: { data: MapData }) {
       <AnimatePresence>
         {modal?.type === 'scope' && <ScopePicker key="scope" />}
         {modal?.type === 'lang' && <LanguageDialog key="lang" />}
+        {modal?.type === 'qr' && <QrDialog key="qr" />}
         {modal?.type === 'event' && <EventDetail key={`event-${modal.id}`} id={modal.id} />}
         {modal?.type === 'create' && <CreateEventFlow key="create" />}
         {modal?.type === 'assistant' && <Assistant key="assistant" />}

@@ -10,6 +10,7 @@ export type ModalState =
   | { type: 'event'; id: string }
   | { type: 'scope' }
   | { type: 'lang' }
+  | { type: 'qr' }
   | { type: 'assistant'; demo?: boolean }
 
 interface UiApi {

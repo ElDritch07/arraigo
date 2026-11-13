@@ -128,9 +128,21 @@ export function EmptyState({ children }: { children: ReactNode }) {
 
 export function ScreenTitle({ children, sub }: { children: ReactNode; sub?: ReactNode }) {
   return (
-    <header className="mb-4">
-      <h1 className="text-xl font-semibold leading-tight tracking-tight">{children}</h1>
-      {sub && <p className="mt-1 text-base text-muted">{sub}</p>}
+    <header className="mb-5">
+      <h1 className="text-2xl font-bold leading-tight tracking-tight">{children}</h1>
+      {sub && <p className="mt-1.5 text-base text-muted">{sub}</p>}
     </header>
+  )
+}
+
+// Título de sección: un escalón por debajo del de pantalla y por encima del de tarjeta.
+export function SectionTitle({ id, children, sub }: { id?: string; children: ReactNode; sub?: ReactNode }) {
+  return (
+    <div className="mb-3">
+      <h2 id={id} className="text-lg font-semibold leading-snug">
+        {children}
+      </h2>
+      {sub && <p className="mt-0.5 text-sm text-muted">{sub}</p>}
+    </div>
   )
 }

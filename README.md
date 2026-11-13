@@ -2,7 +2,7 @@
 
 Web móvil para participación y cohesión comunitaria en Gran Canaria. Mapa de municipios y barrios con un bosque de árboles (cada persona tiene el suyo), eventos con tablón, voluntariado, buzón, puntos de encuentro físicos, perfil con una planta que crece y un asistente de voz y texto. No hay backend ni base de datos: todo es de ejemplo y lo que se hace se guarda solo en el navegador.
 
-Versión publicada: https://eldritch07.github.io/arraigo/ (añade `?demo=1` para el recorrido automático).
+Versión publicada: https://eldritch07.github.io/arraigo/ (añade `?demo=1` para el recorrido automático). Hay un código QR del enlace en `qr-arraigo.png` y también dentro de la app, en Perfil, con el botón "Ver código QR" (`node scripts/make-qr.mjs <enlace>` lo regenera).
 
 El nombre viene de "arraigo": estar enraizado en un lugar y sentirse parte de él.
 

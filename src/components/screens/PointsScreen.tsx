@@ -58,7 +58,7 @@ export function PointsScreen() {
                 transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
                 className="rounded-control border border-line bg-surface p-3"
               >
-                <h2 className="text-base font-semibold leading-snug">{pointName(p.type, p.barrioId)}</h2>
+                <h2 className="text-lg font-semibold leading-snug">{pointName(p.type, p.barrioId)}</h2>
                 <p className="text-sm text-muted">{barrio?.municipio}</p>
                 <ul className="mt-2 space-y-1 text-base">
                   <li className="flex items-center gap-2">

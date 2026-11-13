@@ -1,4 +1,4 @@
-import { Accessibility, Bookmark, Clock, MapPin, Plus, Store, Users } from 'lucide-react'
+import { Accessibility, Bookmark, ChevronDown, Clock, MapPin, Plus, SlidersHorizontal, Store, Users } from 'lucide-react'
 import { motion } from 'motion/react'
 import { Fragment, useMemo, useState } from 'react'
 import { useT } from '../../i18n'
@@ -7,7 +7,7 @@ import { eventTitle, useApp } from '../../state/app'
 import { useInScope, useRequireAccount } from '../../state/hooks'
 import { useUi } from '../../state/ui'
 import { EventActions } from '../EventActions'
-import { Button, EmptyState, Field, ScreenTitle, StatusBadge, fieldClass } from '../ui'
+import { Button, EmptyState, Field, ScreenTitle, SectionTitle, StatusBadge, fieldClass } from '../ui'
 
 const STATUSES: EventStatus[] = ['presented', 'review', 'approved', 'ongoing', 'finished']
 const KINDS: EventKind[] = ['fiesta', 'voluntariado', 'deporte', 'cultura', 'taller', 'otro']
@@ -59,6 +59,9 @@ export function EventsScreen() {
     [events, inScope],
   )
 
+  const activeFilters =
+    Number(kind !== 'all') + Number(onlyAccessible) + Number(onlySaved) + Number(sort !== 'date')
+
   const chip = (active: boolean) =>
     `min-h-11 shrink-0 rounded-control border px-3 text-base font-medium ${
       active ? 'border-accent bg-accent text-white' : 'border-line bg-surface text-ink hover:bg-canvas'
@@ -74,10 +77,9 @@ export function EventsScreen() {
 
       {featured.length > 0 && (
         <section className="mb-5" aria-labelledby="featured-h">
-          <h2 id="featured-h" className="text-base font-semibold">
+          <SectionTitle id="featured-h" sub={t('sp.about')}>
             {t('sp.featured')}
-          </h2>
-          <p className="mb-2 text-sm text-muted">{t('sp.about')}</p>
+          </SectionTitle>
           <ul className="no-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 pb-1">
             {featured.map((e) => {
               const { day, month } = dayMonth(e.date)
@@ -92,7 +94,7 @@ export function EventsScreen() {
                       <Store size={14} aria-hidden />
                       {t('sp.badge')}
                     </span>
-                    <span className="text-base font-semibold leading-snug">{eventTitle(e, td)}</span>
+                    <span className="text-lg font-semibold leading-snug">{eventTitle(e, td)}</span>
                     <span className="mt-1 text-sm text-accent-strong">{t('sp.by', { name: e.sponsor ?? '' })}</span>
                     <span className="mt-auto pt-2 text-sm text-muted">
                       {day} {month}, {e.time}
@@ -116,6 +118,20 @@ export function EventsScreen() {
         ))}
       </div>
 
+      <details className="group mb-1 rounded-control border border-line bg-surface">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 text-base font-semibold [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center gap-2">
+            <SlidersHorizontal size={18} className="text-accent" aria-hidden />
+            {t('ev.filters')}
+            {activeFilters > 0 && (
+              <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-accent px-1.5 text-sm font-medium text-white">
+                {activeFilters}
+              </span>
+            )}
+          </span>
+          <ChevronDown size={18} className="transition-transform group-open:rotate-180" aria-hidden />
+        </summary>
+        <div className="space-y-3 border-t border-line px-3 pb-3 pt-3">
       <Field label={t('ev.filter.kind')}>
         {(p) => (
           <select {...p} className={fieldClass} value={kind} onChange={(e) => setKind(e.target.value as EventKind | 'all')}>
@@ -161,6 +177,8 @@ export function EventsScreen() {
         <Accessibility size={18} aria-hidden />
         {t('ev.filter.accessible')}
       </label>
+        </div>
+      </details>
 
       <p className="my-3 text-sm text-muted" aria-live="polite">
         {t('common.results', { n: list.length })}
@@ -206,7 +224,7 @@ export function EventsScreen() {
                         </span>
                       )}
                     </span>
-                    <span className="block text-base font-semibold leading-snug">{eventTitle(e, td)}</span>
+                    <span className="block text-lg font-semibold leading-snug">{eventTitle(e, td)}</span>
                     <span className="mt-1.5 block space-y-0.5 text-sm text-muted">
                       <span className="flex items-center gap-1.5">
                         <Clock size={14} aria-hidden />
