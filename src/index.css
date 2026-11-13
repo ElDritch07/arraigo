@@ -94,6 +94,11 @@ textarea {
   outline-offset: 2px;
 }
 
+/* Los títulos y paneles que reciben el foco por código (tabindex -1) no son controles: sin recuadro. */
+[tabindex='-1']:focus-visible {
+  outline: none;
+}
+
 .maplibregl-ctrl-top-right {
   margin-top: 3.75rem;
 }

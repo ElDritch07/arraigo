@@ -166,25 +166,29 @@ function Content({ welcome, onDone }: { welcome: boolean; onDone: () => void }) 
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -28 }}
         transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+        className={step === 0 ? 'w-full' : 'mx-auto w-full md:max-w-md'}
       >
         {step === 0 && (
-          <div className="text-center">
-            <div className="mx-auto flex h-48 items-end justify-center">
-              <GrowingPlant />
+          // En ordenador la bienvenida se reparte en dos columnas: presentación a la izquierda y accesos a la derecha.
+          <div className="text-center md:grid md:grid-cols-2 md:items-center md:gap-16 md:text-start">
+            <div>
+              <div className="mx-auto flex h-48 items-end justify-center md:mx-0 md:h-56 md:justify-start">
+                <GrowingPlant />
+              </div>
+              <p className="mt-2 flex items-center justify-center gap-2 text-base font-semibold text-accent-strong md:justify-start">
+                <Sprout size={20} aria-hidden />
+                {t('app.name')}
+              </p>
+              <h1 ref={heading} tabIndex={-1} className="mt-2 text-3xl font-semibold leading-tight outline-none md:text-4xl">
+                {t('auth.welcome.title')}
+              </h1>
+              <p className="mx-auto mt-3 max-w-sm text-lg text-muted md:mx-0 md:max-w-md">{t('auth.welcome.text')}</p>
+              <div className="mt-6 text-start">
+                <h2 className="mb-2 text-base font-semibold">{t('auth.language')}</h2>
+                <LanguageChips />
+              </div>
             </div>
-            <p className="mt-2 flex items-center justify-center gap-2 text-base font-semibold text-accent-strong">
-              <Sprout size={20} aria-hidden />
-              {t('app.name')}
-            </p>
-            <h1 ref={heading} tabIndex={-1} className="mt-2 text-3xl font-semibold leading-tight outline-none">
-              {t('auth.welcome.title')}
-            </h1>
-            <p className="mx-auto mt-3 max-w-sm text-lg text-muted">{t('auth.welcome.text')}</p>
-            <div className="mt-6 text-start">
-              <h2 className="mb-2 text-base font-semibold">{t('auth.language')}</h2>
-              <LanguageChips />
-            </div>
-            <div className="mt-6 space-y-3">
+            <div className="mt-6 space-y-3 md:mt-0">
               <Button className="w-full" onClick={() => setStep(1)}>
                 {t('auth.create')}
               </Button>
@@ -362,8 +366,10 @@ function Content({ welcome, onDone }: { welcome: boolean; onDone: () => void }) 
 // Primera pantalla de la app.
 export function AuthScreen() {
   return (
-    <main className="mx-auto h-dvh max-w-md overflow-y-auto px-5 py-8">
-      <Content welcome onDone={() => undefined} />
+    <main className="h-dvh overflow-y-auto">
+      <div className="mx-auto flex min-h-full w-full max-w-md items-center px-5 py-8 md:max-w-5xl md:px-10">
+        <Content welcome onDone={() => undefined} />
+      </div>
     </main>
   )
 }
