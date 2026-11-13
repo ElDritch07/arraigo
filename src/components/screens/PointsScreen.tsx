@@ -86,7 +86,7 @@ export function PointsScreen() {
                   </Button>
                   <a
                     href={`tel:${p.phone.replace(/\s/g, '')}`}
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-control bg-accent px-4 py-2 text-base font-medium text-white hover:bg-accent-strong"
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-control bg-accent px-4 py-2 text-base font-medium text-white hover:bg-accent-hover"
                   >
                     <Phone size={18} aria-hidden />
                     {t('pt.call')}

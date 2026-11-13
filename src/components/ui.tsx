@@ -9,7 +9,7 @@ export const fieldClass =
 type Variant = 'primary' | 'secondary' | 'ghost'
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-accent text-white hover:bg-accent-strong',
+  primary: 'bg-accent text-white hover:bg-accent-hover',
   secondary: 'border border-line bg-surface text-ink hover:bg-canvas',
   ghost: 'text-ink hover:bg-canvas',
 }

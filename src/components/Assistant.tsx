@@ -260,11 +260,11 @@ export function Assistant() {
               label={listening ? t('as.mic.stop') : t('as.mic')}
               aria-pressed={listening}
               onClick={toggleMic}
-              className={`border ${listening ? 'border-water bg-water text-white hover:bg-water' : 'border-line'}`}
+              className={`border ${listening ? 'border-sug-strong bg-sug-strong text-white hover:bg-sug-strong' : 'border-line'}`}
             >
               <Mic size={22} aria-hidden />
             </IconButton>
-            <IconButton label={t('as.send')} type="submit" className="bg-accent text-white hover:bg-accent-strong">
+            <IconButton label={t('as.send')} type="submit" className="bg-accent text-white hover:bg-accent-hover">
               <Send size={20} className="rtl:-scale-x-100" aria-hidden />
             </IconButton>
           </form>

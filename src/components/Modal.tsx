@@ -47,7 +47,7 @@ export function Modal({ title, onClose, variant = 'sheet', children, hideHeader 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center">
       <motion.div
-        className="absolute inset-0 bg-ink/45"
+        className="absolute inset-0 bg-black/50"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

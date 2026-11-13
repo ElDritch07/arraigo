@@ -143,7 +143,7 @@ export function Shell({ data }: { data: MapData }) {
       <div inert={modal !== null} className="relative h-dvh overflow-hidden">
         <a
           href="#content"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:rounded-control focus:bg-ink focus:px-4 focus:py-3 focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:start-3 focus:top-3 focus:z-50 focus:rounded-control focus:bg-ink focus:px-4 focus:py-3 focus:text-on-ink"
         >
           {t('a11y.skip')}
         </a>
@@ -248,7 +248,7 @@ export function Shell({ data }: { data: MapData }) {
           }}
         >
           <DropletIcon size={48} />
-          <span className="text-base font-semibold text-water">{t('as.name')}</span>
+          <span className="text-base font-semibold text-water-fg">{t('as.name')}</span>
           <span className="sr-only">{t('as.open')}</span>
         </motion.button>
 

@@ -99,7 +99,8 @@ export function MapView(props: Props) {
     map.on('load', () => {
       if (mapRef.current !== map) return
       const c = [0, 1, 2, 3, 4].map((i) => token(`--color-map-${i}`))
-      const ink = token('--color-ink')
+      // El mapa mantiene su estilo claro también en modo oscuro, así que sus textos usan una tinta fija.
+      const ink = '#17231c'
       const accent = token('--color-accent')
       const accentStrong = token('--color-accent-strong')
       const ramp = [
@@ -539,7 +540,7 @@ export function MapView(props: Props) {
       </AnimatePresence>
       {tip && (
         <div
-          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[130%] rounded-control bg-ink px-2.5 py-1 text-sm font-medium text-white shadow-card"
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[130%] rounded-control bg-ink px-2.5 py-1 text-sm font-medium text-on-ink shadow-card"
           style={{ left: tip.x, top: tip.y }}
         >
           {tip.text}
