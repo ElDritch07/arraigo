@@ -19,6 +19,7 @@ import { LanguageDialog } from './LanguageDialog'
 import { QrDialog } from './QrDialog'
 import { MapView } from './MapView'
 import { ScopeBar } from './ScopeBar'
+import { ThemeButton } from './ThemeButton'
 import { ScopePicker } from './ScopePicker'
 import { EventsScreen } from './screens/EventsScreen'
 import { MailboxScreen } from './screens/MailboxScreen'
@@ -177,15 +178,18 @@ export function Shell({ data }: { data: MapData }) {
             <Sprout size={20} className="shrink-0 text-accent" aria-hidden />
             <span className="truncate">{t('app.name')}</span>
           </p>
-          <button
-            type="button"
-            onClick={() => openModal({ type: 'lang' })}
-            aria-label={t('a11y.lang')}
-            className="pointer-events-auto inline-flex min-h-11 shrink-0 items-center gap-2 rounded-control bg-surface px-3 text-base font-semibold shadow-card"
-          >
-            <Globe size={20} aria-hidden />
-            <span className="uppercase">{lang.code}</span>
-          </button>
+          <div className="pointer-events-auto flex shrink-0 gap-2">
+            <ThemeButton />
+            <button
+              type="button"
+              onClick={() => openModal({ type: 'lang' })}
+              aria-label={t('a11y.lang')}
+              className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-control bg-surface px-3 text-base font-semibold shadow-card"
+            >
+              <Globe size={20} aria-hidden />
+              <span className="uppercase">{lang.code}</span>
+            </button>
+          </div>
         </header>
 
         <motion.aside

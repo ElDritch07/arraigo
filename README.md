@@ -32,6 +32,7 @@ La app puede recorrerse sola mientras alguien la explica: botón "Modo presentac
 - Apuntarse no da puntos. Los puntos llegan cuando el organizador confirma que fuiste (en la demo, el botón "simular que el organizador me confirma"). Quien organiza confirma asistentes desde el detalle de su evento.
 - Voluntariado, buzón de quejas y sugerencias con foto, puntos de encuentro con cartelera imprimible, perfil y soporte.
 - Perfil con tu actividad: eventos y voluntariados a los que te has apuntado (con su estado de confirmación), eventos guardados y eventos creados.
+- Modo claro y oscuro: botón de luna o sol en la cabecera y en la entrada, y selector "Aspecto" en Perfil (según el sistema, claro u oscuro). Se recuerda la elección.
 - Pensada para móvil: paneles que no se desplazan con el mapa, teclado en pantalla que no tapa los campos, zonas seguras del notch y de la barra inferior, mapa sin giro accidental y aviso de carga mientras llegan las teselas.
 - Plantas canarias: drago, pino canario, palmera canaria y tajinaste rojo, con 6 fases.
 - Asistente Gotita por texto y voz (Chrome y Safari).

@@ -11,6 +11,7 @@ import { BarrioSelect } from './BarrioSelect'
 import { IdButtons, IdFlow } from './IdAccess'
 import { LanguageChips } from './LanguageChips'
 import { Modal } from './Modal'
+import { ThemeButton } from './ThemeButton'
 import { Plant } from './Plant'
 import { Button, Field, fieldClass } from './ui'
 
@@ -367,6 +368,9 @@ function Content({ welcome, onDone }: { welcome: boolean; onDone: () => void }) 
 export function AuthScreen() {
   return (
     <main className="h-dvh overflow-y-auto">
+      <div className="fixed end-4 top-4 z-10">
+        <ThemeButton />
+      </div>
       <div className="mx-auto flex min-h-full w-full max-w-md items-center px-5 py-8 md:max-w-5xl md:px-10">
         <Content welcome onDone={() => undefined} />
       </div>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useT } from '../../i18n'
 import { MAX_STAGE, POINTS, pointsToNext, progressInStage, stageOf } from '../../lib/plants'
 import { eventTitle, useApp } from '../../state/app'
+import { useTheme, type ThemeMode } from '../../state/theme'
 import { useTour } from '../../state/tour'
 import { useUi } from '../../state/ui'
 import { LanguageChips } from '../LanguageChips'
@@ -133,6 +134,7 @@ export function ProfileScreen() {
   const { user, byId, events, volunteering, reports, logout, resetDemo } = useApp()
   const { openModal, showToast } = useUi()
   const tour = useTour()
+  const { mode, setMode } = useTheme()
   const [message, setMessage] = useState('')
   const [confirmReset, setConfirmReset] = useState(false)
 
@@ -240,6 +242,28 @@ export function ProfileScreen() {
           </dl>
         </section>
       )}
+
+      <section className="mb-5" aria-labelledby="theme-h">
+        <h2 id="theme-h" className="mb-3 text-lg font-semibold">
+          {t('theme.title')}
+        </h2>
+        <div role="radiogroup" aria-label={t('theme.title')} className="grid grid-cols-3 gap-2">
+          {(['system', 'light', 'dark'] as ThemeMode[]).map((m) => (
+            <button
+              key={m}
+              type="button"
+              role="radio"
+              aria-checked={mode === m}
+              onClick={() => setMode(m)}
+              className={`min-h-11 rounded-control border px-2 text-base font-medium ${
+                mode === m ? 'border-accent bg-accent text-white' : 'border-line bg-surface text-ink hover:bg-canvas'
+              }`}
+            >
+              {t(`theme.${m}` as 'theme.system')}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section className="mb-5" aria-labelledby="lang-h">
         <h2 id="lang-h" className="mb-3 text-lg font-semibold">

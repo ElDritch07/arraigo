@@ -8,17 +8,20 @@ import { Button } from './components/ui'
 import { I18nProvider, useT } from './i18n'
 import { loadCollection, loadLabels, toTerritories } from './lib/geo'
 import { AppProvider, useApp } from './state/app'
+import { ThemeProvider } from './state/theme'
 import { TourProvider } from './state/tour'
 import { UiProvider } from './state/ui'
 
 export default function App() {
   return (
     <I18nProvider>
-      <MotionConfig reducedMotion="user">
-        <UiProvider>
-          <Loader />
-        </UiProvider>
-      </MotionConfig>
+      <ThemeProvider>
+        <MotionConfig reducedMotion="user">
+          <UiProvider>
+            <Loader />
+          </UiProvider>
+        </MotionConfig>
+      </ThemeProvider>
     </I18nProvider>
   )
 }

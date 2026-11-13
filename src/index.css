@@ -78,29 +78,25 @@ html {
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --color-canvas: #0f1612;
     --color-surface: #17211b;
     --color-ink: #e8f0ea;
     --color-muted: #a6b6ac;
     --color-line: #2b3a31;
-
     --color-accent-strong: #86d6ab;
     --color-accent-soft: #1c3527;
     --color-accent-hover: #23704a;
     --color-focus: #86d6ab;
     --color-on-ink: #0f1612;
-
     --color-water: #5ba7da;
     --color-water-soft: #15324a;
     --color-water-fg: #8cc6ee;
     --color-droplet-face: #0b2437;
-
     --color-queja-bg: #3b1f1a;
     --color-queja-fg: #ffb4a4;
     --color-sug-bg: #15324a;
     --color-sug-fg: #9fd0f0;
-
     --color-st-presented-bg: #2a3238;
     --color-st-presented-fg: #d3dbe0;
     --color-st-review-bg: #3a2f12;
@@ -111,30 +107,84 @@ html {
     --color-st-ongoing-fg: #9fd0f0;
     --color-st-finished-bg: #2b2b2b;
     --color-st-finished-fg: #cfcfcf;
-
     --shadow-card: 0 8px 30px rgb(0 0 0 / 0.55);
   }
-
-  /* El mapa base es claro: se atenúa un poco para que no deslumbre junto a los paneles oscuros. */
-  .maplibregl-canvas {
+  :root:not([data-theme='light']) .maplibregl-canvas {
     filter: brightness(0.8) saturate(0.9);
   }
-  .maplibregl-ctrl-group {
+  :root:not([data-theme='light']) .maplibregl-ctrl-group {
     background: var(--color-surface);
   }
-  .maplibregl-ctrl-group button + button {
+  :root:not([data-theme='light']) .maplibregl-ctrl-group button + button {
     border-top-color: var(--color-line);
   }
-  .maplibregl-ctrl button .maplibregl-ctrl-icon {
+  :root:not([data-theme='light']) .maplibregl-ctrl button .maplibregl-ctrl-icon {
     filter: invert(1) hue-rotate(180deg);
   }
-  .maplibregl-ctrl-attrib {
+  :root:not([data-theme='light']) .maplibregl-ctrl-attrib {
     background: rgb(23 33 27 / 0.85) !important;
     color: var(--color-muted);
   }
-  .maplibregl-ctrl-attrib a {
+  :root:not([data-theme='light']) .maplibregl-ctrl-attrib a {
     color: var(--color-ink);
   }
+}
+
+/* Tema elegido a mano con el botón: manda sobre el del sistema. */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-canvas: #0f1612;
+  --color-surface: #17211b;
+  --color-ink: #e8f0ea;
+  --color-muted: #a6b6ac;
+  --color-line: #2b3a31;
+  --color-accent-strong: #86d6ab;
+  --color-accent-soft: #1c3527;
+  --color-accent-hover: #23704a;
+  --color-focus: #86d6ab;
+  --color-on-ink: #0f1612;
+  --color-water: #5ba7da;
+  --color-water-soft: #15324a;
+  --color-water-fg: #8cc6ee;
+  --color-droplet-face: #0b2437;
+  --color-queja-bg: #3b1f1a;
+  --color-queja-fg: #ffb4a4;
+  --color-sug-bg: #15324a;
+  --color-sug-fg: #9fd0f0;
+  --color-st-presented-bg: #2a3238;
+  --color-st-presented-fg: #d3dbe0;
+  --color-st-review-bg: #3a2f12;
+  --color-st-review-fg: #ffd98a;
+  --color-st-approved-bg: #1c3527;
+  --color-st-approved-fg: #86d6ab;
+  --color-st-ongoing-bg: #15324a;
+  --color-st-ongoing-fg: #9fd0f0;
+  --color-st-finished-bg: #2b2b2b;
+  --color-st-finished-fg: #cfcfcf;
+  --shadow-card: 0 8px 30px rgb(0 0 0 / 0.55);
+}
+:root[data-theme='dark'] .maplibregl-canvas {
+  filter: brightness(0.8) saturate(0.9);
+}
+:root[data-theme='dark'] .maplibregl-ctrl-group {
+  background: var(--color-surface);
+}
+:root[data-theme='dark'] .maplibregl-ctrl-group button + button {
+  border-top-color: var(--color-line);
+}
+:root[data-theme='dark'] .maplibregl-ctrl button .maplibregl-ctrl-icon {
+  filter: invert(1) hue-rotate(180deg);
+}
+:root[data-theme='dark'] .maplibregl-ctrl-attrib {
+  background: rgb(23 33 27 / 0.85) !important;
+  color: var(--color-muted);
+}
+:root[data-theme='dark'] .maplibregl-ctrl-attrib a {
+  color: var(--color-ink);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
 }
 
 html,
