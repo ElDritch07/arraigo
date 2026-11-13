@@ -8,6 +8,7 @@ import { useApp } from '../state/app'
 import { useTour } from '../state/tour'
 import { useUi } from '../state/ui'
 import { BarrioSelect } from './BarrioSelect'
+import { IdButtons, IdFlow } from './IdAccess'
 import { LanguageChips } from './LanguageChips'
 import { Modal } from './Modal'
 import { Plant } from './Plant'
@@ -15,6 +16,9 @@ import { Button, Field, fieldClass } from './ui'
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const LOGIN = 10
+const CERT = 20
+const CLAVE = 21
+const DNI = 22
 
 // La planta de la bienvenida crece sola, de semilla a flor, y pasa por las cuatro especies.
 function GrowingPlant() {
@@ -94,7 +98,7 @@ export function PasswordField({
 
 function Content({ welcome, onDone }: { welcome: boolean; onDone: () => void }) {
   const { t, td } = useT()
-  const { signUp, login, continueAsGuest } = useApp()
+  const { signUp, login, continueAsGuest, hasAccount, loginSimulated } = useApp()
   const tour = useTour()
   const [step, setStep] = useState(welcome ? 0 : 1)
   const [name, setName] = useState('')
@@ -131,6 +135,20 @@ function Content({ welcome, onDone }: { welcome: boolean; onDone: () => void }) 
     await signUp({ name: name.trim(), email: email.trim(), barrioId, plant, password })
     setBusy(false)
     onDone()
+  }
+  // Tras una identificación simulada: si ya hay cuenta se entra; si no, se sigue con el alta (barrio y planta).
+  const verified = () => {
+    if (hasAccount && loginSimulated()) {
+      onDone()
+      return
+    }
+    const random = typeof crypto !== "undefined" && "getRandomValues" in crypto
+      ? Array.from(crypto.getRandomValues(new Uint8Array(12)), (b) => b.toString(36)).join('')
+      : Math.random().toString(36).slice(2)
+    setName((n) => n || 'Persona de ejemplo')
+    setEmail((m) => m || 'identidad@arraigo.demo')
+    setPassword(random)
+    setStep(2)
   }
   const submitLogin = async () => {
     setBusy(true)
@@ -173,6 +191,9 @@ function Content({ welcome, onDone }: { welcome: boolean; onDone: () => void }) 
               <Button variant="secondary" className="w-full" onClick={() => setStep(LOGIN)}>
                 {t('auth.login')}
               </Button>
+              <div className="pt-2">
+                <IdButtons onPick={(k) => setStep(k === 'cert' ? CERT : k === 'clave' ? CLAVE : DNI)} />
+              </div>
               <Button
                 variant="secondary"
                 className="w-full"
@@ -212,12 +233,21 @@ function Content({ welcome, onDone }: { welcome: boolean; onDone: () => void }) 
             <Button type="submit" className="w-full" disabled={busy}>
               {t('auth.login.submit')}
             </Button>
+            <IdButtons onPick={(k) => setStep(k === 'cert' ? CERT : k === 'clave' ? CLAVE : DNI)} />
             {welcome && (
               <Button variant="secondary" className="w-full" onClick={() => setStep(0)}>
                 {t('common.back')}
               </Button>
             )}
           </form>
+        )}
+
+        {(step === CERT || step === CLAVE || step === DNI) && (
+          <IdFlow
+            kind={step === CERT ? 'cert' : step === CLAVE ? 'clave' : 'dni'}
+            onBack={() => setStep(welcome ? 0 : 1)}
+            onVerified={verified}
+          />
         )}
 
         {step === 1 && (

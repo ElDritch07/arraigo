@@ -97,6 +97,7 @@ export function MapView(props: Props) {
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
 
     map.on('load', () => {
+      if (mapRef.current !== map) return
       const c = [0, 1, 2, 3, 4].map((i) => token(`--color-map-${i}`))
       const ink = token('--color-ink')
       const accent = token('--color-accent')
@@ -396,13 +397,13 @@ export function MapView(props: Props) {
 
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map) return
+    if (!ready || !map || !map.getLayer('points-inner')) return
     ;(map.getSource('badges') as maplibregl.GeoJSONSource).setData(badgeData)
   }, [ready, badgeData])
 
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map) return
+    if (!ready || !map || !map.getLayer('points-inner')) return
     const data: FeatureCollection<Point> = {
       type: 'FeatureCollection',
       features: markers.map((m) => ({
@@ -434,14 +435,14 @@ export function MapView(props: Props) {
 
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map) return
+    if (!ready || !map || !map.getLayer('points-inner')) return
     ;(map.getSource('trees') as maplibregl.GeoJSONSource).setData(treeData)
   }, [ready, treeData])
 
   const pulseId = pulse?.id
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map || !pulse) return
+    if (!ready || !map || !pulse || !map.getLayer('pulse')) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     ;(map.getSource('pulse') as maplibregl.GeoJSONSource).setData({
       type: 'Feature',
@@ -463,7 +464,7 @@ export function MapView(props: Props) {
 
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map) return
+    if (!ready || !map || !map.getLayer('points-inner')) return
     const v = showMarkers ? 'visible' : 'none'
     map.setLayoutProperty('points-outer', 'visibility', v)
     map.setLayoutProperty('points-inner', 'visibility', v)
@@ -471,7 +472,7 @@ export function MapView(props: Props) {
 
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map) return
+    if (!ready || !map || !map.getLayer('points-inner')) return
     const m = normalize(plantsMuni)
     for (const [id, v] of Object.entries(m)) map.setFeatureState({ source: 'municipios', id }, { activity: v })
     const b = normalize(plantsBarrio)
@@ -480,7 +481,7 @@ export function MapView(props: Props) {
 
   useEffect(() => {
     const map = mapRef.current
-    if (!ready || !map) return
+    if (!ready || !map || !map.getLayer('points-inner')) return
     const muni = selection.municipioId ?? ''
     const inMuni: maplibregl.ExpressionSpecification = ['==', ['get', 'municipioId'], muni]
     map.setFilter('barrios-fill', inMuni)

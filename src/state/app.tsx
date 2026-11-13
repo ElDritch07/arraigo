@@ -96,6 +96,8 @@ interface AppApi {
   entered: boolean
   signUp: (data: { name: string; email: string; barrioId: string; plant: Species; password: string }) => Promise<void>
   login: (email: string, password: string) => Promise<LoginResult>
+  hasAccount: boolean
+  loginSimulated: () => boolean
   continueAsGuest: () => void
   logout: () => void
   resetDemo: () => void
@@ -415,6 +417,13 @@ export function AppProvider({
         if (acc.user.email.toLowerCase() !== email.trim().toLowerCase() || h !== acc.hash) return 'bad'
         setP((s) => ({ ...s, session: true, guest: false }))
         return 'ok'
+      },
+      hasAccount: !!p.account,
+      // Acceso simulado con certificado o Cl@ve PIN: si ya hay cuenta en este navegador, se entra en ella.
+      loginSimulated: () => {
+        if (!ref.current.account) return false
+        setP((s) => ({ ...s, session: true, guest: false }))
+        return true
       },
       continueAsGuest: () => setP((s) => ({ ...s, guest: true })),
       logout: () => setP((s) => ({ ...s, session: false, guest: false })),
