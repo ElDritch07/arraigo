@@ -1,11 +1,15 @@
 import type { FeatureCollection, Point } from 'geojson'
 import * as maplibregl from 'maplibre-gl'
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { mergeBbox } from '../lib/geo'
 import type { Tree } from '../lib/forest'
 import { treeImage } from '../lib/treeImages'
 import type { LabelCollection, Scope, Territory, TerritoryCollection } from '../lib/types'
+
+// El worker es un archivo aparte: se importa como recurso para que la compilación lo incluya.
+maplibregl.setWorkerUrl(new URL(workerUrl, window.location.href).href)
 
 // Estilo base libre de OpenFreeMap (datos de OpenStreetMap). Alternativas: 'bright', 'liberty'.
 const BASE_STYLE = 'https://tiles.openfreemap.org/styles/positron'
