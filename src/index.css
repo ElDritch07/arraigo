@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+
+/*
+  Tokens de diseño. Cambiar aquí cambia toda la web, incluido el mapa
+  (MapView lee estas variables en tiempo de ejecución).
+  Paleta: neutros, un verde de acento (las plantas) y un azul de agua solo para el asistente.
+*/
+@theme {
+  --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, 'Noto Sans', 'Noto Sans Arabic', 'Noto Sans SC',
+    'Noto Sans Devanagari', sans-serif;
+
+  --color-canvas: #f3f5f2;
+  --color-surface: #ffffff;
+  --color-ink: #17231c;
+  --color-muted: #55645b;
+  --color-line: #d8dfd9;
+
+  --color-accent: #2a7a52;
+  --color-accent-strong: #1d5c3d;
+  --color-accent-soft: #e2f1e8;
+
+  --color-water: #2b6f9e;
+  --color-water-soft: #e3eff7;
+
+  --color-map-0: #dbe8de;
+  --color-map-1: #b5d6bf;
+  --color-map-2: #84bb98;
+  --color-map-3: #4f9b70;
+  --color-map-4: #2a7a52;
+
+  --color-leaf: #3c9a5f;
+  --color-leaf-dark: #26703f;
+  --color-trunk: #7a5230;
+  --color-soil: #8b6b4a;
+  --color-bloom: #d6453d;
+  --color-berry: #e08a2c;
+
+  --color-st-presented-bg: #eceff1;
+  --color-st-presented-fg: #3b4750;
+  --color-st-review-bg: #fff1d6;
+  --color-st-review-fg: #7a4b00;
+  --color-st-approved-bg: #e2f1e8;
+  --color-st-approved-fg: #1d5c3d;
+  --color-st-ongoing-bg: #e3eff7;
+  --color-st-ongoing-fg: #1b4f73;
+  --color-st-finished-bg: #e9e9e9;
+  --color-st-finished-fg: #4a4a4a;
+
+  --radius-card: 1.25rem;
+  --radius-control: 0.75rem;
+  --shadow-card: 0 8px 30px rgb(23 35 28 / 0.14);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+button,
+a,
+select,
+summary,
+[role='tab'] {
+  touch-action: manipulation;
+}
+
+/* 16 px evita que iOS haga zoom al enfocar un campo */
+input,
+select,
+textarea {
+  font-size: 1rem;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.maplibregl-ctrl-top-right {
+  margin-top: 3.75rem;
+}
+.maplibregl-ctrl-attrib {
+  font-size: 11px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+#print-root {
+  display: none;
+}
+
+@media print {
+  #root,
+  #modal-root {
+    display: none !important;
+  }
+  #print-root {
+    display: block;
+    color: #000;
+    background: #fff;
+    font-size: 14pt;
+    padding: 12mm;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
