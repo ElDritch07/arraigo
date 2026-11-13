@@ -110,6 +110,17 @@ export function Shell({ data }: { data: MapData }) {
     scroller.current?.scrollTo({ top: 0 })
   }, [tab, scope])
 
+  // Al enfocar un campo con el teclado abierto, se desplaza hasta dejarlo a la vista.
+  useEffect(() => {
+    const onFocus = (e: FocusEvent) => {
+      const el = e.target as HTMLElement
+      if (!/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return
+      window.setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 320)
+    }
+    document.addEventListener('focusin', onFocus)
+    return () => document.removeEventListener('focusin', onFocus)
+  }, [])
+
   // Un enlace compartido (?event=ID) abre directamente ese evento.
   const { events } = useApp()
   const deepLinked = useRef(false)
@@ -151,6 +162,7 @@ export function Shell({ data }: { data: MapData }) {
           trees={trees}
           pulse={pulse}
           ariaLabel={t('a11y.map')}
+          loadingLabel={t('common.loading')}
           onSelectMunicipio={selectMunicipio}
           onSelectBarrio={(id) => selectBarrio(id, byId.get(id)?.municipioId ?? '')}
           onSelectMarker={(id) => {
@@ -159,7 +171,7 @@ export function Shell({ data }: { data: MapData }) {
           }}
         />
 
-        <header className="pointer-events-none fixed inset-x-3 top-3 z-10 flex items-center justify-between gap-2 md:start-[28rem]">
+        <header className="pointer-events-none fixed inset-x-3 top-[calc(env(safe-area-inset-top)+0.75rem)] z-10 flex items-center justify-between gap-2 md:start-[28rem]">
           <p className="pointer-events-auto flex min-h-11 min-w-0 items-center gap-2 rounded-control bg-surface px-3 text-base font-semibold shadow-card">
             <Sprout size={20} className="shrink-0 text-accent" aria-hidden />
             <span className="truncate">{t('app.name')}</span>
@@ -202,7 +214,7 @@ export function Shell({ data }: { data: MapData }) {
 
           {tab !== 'profile' && <ScopeBar />}
 
-          <div ref={scroller} id="content" tabIndex={-1} className="min-h-0 flex-1 overflow-y-auto px-4 pt-4 outline-none">
+          <div ref={scroller} id="content" tabIndex={-1} className="min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-contain px-4 pt-4 outline-none">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={tab}

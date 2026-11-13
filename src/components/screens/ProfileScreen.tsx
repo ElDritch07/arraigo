@@ -3,12 +3,130 @@ import { motion } from 'motion/react'
 import { useState } from 'react'
 import { useT } from '../../i18n'
 import { MAX_STAGE, POINTS, pointsToNext, progressInStage, stageOf } from '../../lib/plants'
-import { useApp } from '../../state/app'
+import { eventTitle, useApp } from '../../state/app'
 import { useTour } from '../../state/tour'
 import { useUi } from '../../state/ui'
 import { LanguageChips } from '../LanguageChips'
 import { Plant } from '../Plant'
-import { Button, Field, ScreenTitle, fieldClass } from '../ui'
+import { Button, EmptyState, Field, ScreenTitle, StatusBadge, fieldClass } from '../ui'
+
+// Todo lo que has hecho en un sitio: eventos a los que te has apuntado, los guardados y los que has creado.
+function MyActivity() {
+  const { t, td, dayMonth } = useT()
+  const { events, volunteering, hasJoinedEvent, hasJoinedVol, hasConfirmed, hasSaved } = useApp()
+  const { openModal, setTab } = useUi()
+
+  const joinedEvents = events.filter((e) => hasJoinedEvent(e.id))
+  const joinedVols = volunteering.filter((v) => hasJoinedVol(v.id))
+  const saved = events.filter((e) => hasSaved(e.id))
+  const created = events.filter((e) => e.mine)
+
+  const row = (
+    key: string,
+    title: string,
+    date: string,
+    onClick: () => void,
+    extra: React.ReactNode,
+  ) => {
+    const { day, month } = dayMonth(date)
+    return (
+      <li key={key}>
+        <button
+          type="button"
+          onClick={onClick}
+          className="flex w-full items-center gap-3 px-3 py-2.5 text-start hover:bg-canvas"
+        >
+          <span className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-control bg-accent-soft text-accent-strong">
+            <span className="text-base font-semibold leading-none">{day}</span>
+            <span className="text-xs uppercase">{month}</span>
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-base font-medium leading-snug">{title}</span>
+            <span className="mt-1 flex flex-wrap items-center gap-2">{extra}</span>
+          </span>
+        </button>
+      </li>
+    )
+  }
+
+  const pending = (confirmed: boolean) => (
+    <span
+      className={`inline-flex items-center rounded-md px-2 py-0.5 text-sm font-medium ${
+        confirmed ? 'bg-st-approved-bg text-st-approved-fg' : 'bg-st-review-bg text-st-review-fg'
+      }`}
+    >
+      {confirmed ? t('pf.confirmed') : t('pf.pending')}
+    </span>
+  )
+
+  const eventRow = (e: (typeof events)[number], extra: React.ReactNode) =>
+    row(e.id, eventTitle(e, td), e.date, () => openModal({ type: 'event', id: e.id }), extra)
+
+  const list = (items: React.ReactNode[], empty: string) =>
+    items.length ? (
+      <ul className="divide-y divide-line overflow-hidden rounded-control border border-line bg-surface">{items}</ul>
+    ) : (
+      <EmptyState>{empty}</EmptyState>
+    )
+
+  return (
+    <>
+      <section className="mb-5" aria-labelledby="joined-h">
+        <h2 id="joined-h" className="mb-2 text-base font-semibold">
+          {t('pf.joined.title')}
+        </h2>
+        {list(
+          [
+            ...joinedEvents.map((e) =>
+              eventRow(
+                e,
+                <>
+                  <StatusBadge status={e.status} />
+                  {pending(hasConfirmed(e.id))}
+                </>,
+              ),
+            ),
+            ...joinedVols.map((v) =>
+              row(
+                v.id,
+                eventTitle(v, td),
+                v.date,
+                () => (v.eventId ? openModal({ type: 'event', id: v.eventId }) : setTab('volunteer')),
+                <>
+                  <span className="text-sm font-medium text-muted">{t('pf.volunteering')}</span>
+                  {pending(hasConfirmed(v.id))}
+                </>,
+              ),
+            ),
+          ],
+          t('pf.joined.empty'),
+        )}
+      </section>
+
+      <section className="mb-5" aria-labelledby="saved-h">
+        <h2 id="saved-h" className="mb-2 text-base font-semibold">
+          {t('pf.saved.title')}
+        </h2>
+        {list(
+          saved.map((e) => eventRow(e, <StatusBadge status={e.status} />)),
+          t('pf.saved.empty'),
+        )}
+      </section>
+
+      {created.length > 0 && (
+        <section className="mb-5" aria-labelledby="created-h">
+          <h2 id="created-h" className="mb-2 text-base font-semibold">
+            {t('pf.created.title')}
+          </h2>
+          {list(
+            created.map((e) => eventRow(e, <StatusBadge status={e.status} />)),
+            '',
+          )}
+        </section>
+      )}
+    </>
+  )
+}
 
 export function ProfileScreen() {
   const { t, td } = useT()
@@ -77,6 +195,8 @@ export function ProfileScreen() {
           </Button>
         </section>
       )}
+
+      {user && <MyActivity />}
 
       <section className="mb-5" aria-labelledby="how-h">
         <h2 id="how-h" className="mb-2 text-base font-semibold">

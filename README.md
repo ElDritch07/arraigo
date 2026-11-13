@@ -17,7 +17,7 @@ Se abre en http://localhost:5173. Para generar la versión final: `npm run build
 
 ## Modo presentación
 
-La app puede recorrerse sola mientras alguien la explica: botón "Modo presentación" en la bienvenida y en Perfil, o abrir la dirección con `?demo=1` al final (por ejemplo `http://localhost:5173/?demo=1`). No hay panel encima de la app. El recorrido se detiene en cuanto alguien toca la pantalla o pulsa una tecla. Si no hay cuenta, crea una de demostración. Un enlace a un evento se comparte con `?event=ID`.
+La app puede recorrerse sola mientras alguien la explica: botón "Modo presentación" en la bienvenida y en Perfil, o abrir la dirección con `?demo=1` al final (por ejemplo `http://localhost:5173/?demo=1`). No hay panel encima de la app. El recorrido se detiene con una acción del ratón o del teclado, o con un doble toque seguido en el móvil (un solo roce no lo corta). Si no hay cuenta, crea una de demostración. Un enlace a un evento se comparte con `?event=ID`.
 
 ## Qué hay
 
@@ -31,6 +31,8 @@ La app puede recorrerse sola mientras alguien la explica: botón "Modo presentac
 - Patrocinadores: los comercios locales patrocinan eventos, salen destacados arriba y como publicidad etiquetada en la lista y en el detalle. Así se mantiene la app. Los comercios de ejemplo no son negocios reales.
 - Apuntarse no da puntos. Los puntos llegan cuando el organizador confirma que fuiste (en la demo, el botón "simular que el organizador me confirma"). Quien organiza confirma asistentes desde el detalle de su evento.
 - Voluntariado, buzón de quejas y sugerencias con foto, puntos de encuentro con cartelera imprimible, perfil y soporte.
+- Perfil con tu actividad: eventos y voluntariados a los que te has apuntado (con su estado de confirmación), eventos guardados y eventos creados.
+- Pensada para móvil: paneles que no se desplazan con el mapa, teclado en pantalla que no tapa los campos, zonas seguras del notch y de la barra inferior, mapa sin giro accidental y aviso de carga mientras llegan las teselas.
 - Plantas canarias: drago, pino canario, palmera canaria y tajinaste rojo, con 6 fases.
 - Asistente Gotita por texto y voz (Chrome y Safari).
 - Animaciones de paneles, pestañas, listas, estados y crecimiento (librería `motion`). Se reducen solas si el sistema pide menos movimiento.

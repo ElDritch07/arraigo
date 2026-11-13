@@ -66,7 +66,12 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
 }
 
 button,
@@ -111,6 +116,9 @@ textarea {
   #root,
   #modal-root {
     display: none !important;
+  }
+  body {
+    position: static;
   }
   #print-root {
     display: block;

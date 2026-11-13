@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useT } from '../i18n'
 import type { Key } from '../i18n/es'
 import { useApp } from '../state/app'
-import { normalize, useZoneName } from '../state/hooks'
+import { normalize, useViewport, useZoneName } from '../state/hooks'
 import { useUi } from '../state/ui'
 import { DropletIcon } from './DropletIcon'
 import { Modal } from './Modal'
@@ -51,6 +51,7 @@ export function Assistant() {
   const { closeModal, openModal, setTab, selectBarrio, modal } = useUi()
   const demo = modal?.type === 'assistant' && !!modal.demo
   const currentZone = useZoneName()
+  const vp = useViewport()
   const [messages, setMessages] = useState<Message[]>([{ id: 0, from: 'bot', text: t('as.greeting') }])
   const [text, setText] = useState('')
   const [listening, setListening] = useState(false)
@@ -192,7 +193,7 @@ export function Assistant() {
 
   return (
     <Modal title={t('as.title')} onClose={closeModal}>
-      <div className="flex h-[70dvh] flex-col">
+      <div className="flex flex-col" style={{ height: Math.min(Math.round(vp.height * 0.72), 560) }}>
         <div ref={log} role="log" aria-live="polite" className="flex-1 space-y-3 overflow-y-auto p-4">
           {messages.map((m) => (
             <motion.div

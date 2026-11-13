@@ -2,6 +2,7 @@ import type { FeatureCollection, Point } from 'geojson'
 import * as maplibregl from 'maplibre-gl'
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { mergeBbox } from '../lib/geo'
 import type { Tree } from '../lib/forest'
@@ -34,6 +35,7 @@ interface Props {
   trees: Tree[]
   pulse: { id: string; coordinates: [number, number] } | null
   ariaLabel: string
+  loadingLabel: string
   onSelectMunicipio: (id: string) => void
   onSelectBarrio: (id: string) => void
   onSelectMarker: (id: string) => void
@@ -58,6 +60,7 @@ export function MapView(props: Props) {
   const container = useRef<HTMLDivElement>(null)
   const mapRef = useRef<maplibregl.Map | null>(null)
   const [ready, setReady] = useState(false)
+  const [painted, setPainted] = useState(false)
   const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null)
   const [resizeTick, setResizeTick] = useState(0)
   const cb = useRef(props)
@@ -85,8 +88,11 @@ export function MapView(props: Props) {
       center: [-15.6, 27.95],
       zoom: 9,
       minZoom: 7,
+      maxPitch: 0,
       attributionControl: { compact: true },
     })
+    map.dragRotate.disable()
+    map.touchZoomRotate.disableRotation()
     mapRef.current = map
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right')
 
@@ -183,6 +189,7 @@ export function MapView(props: Props) {
         ['all', ['==', ['get', 'kind'], 'm'], ['!=', ['get', 'id'], '']],
         ['all', ['==', ['get', 'kind'], 'b'], ['==', ['get', 'municipioId'], '']],
       ]
+      const isBarrio = ['==', ['get', 'kind'], 'b'] as maplibregl.ExpressionSpecification
       map.addLayer({
         id: 'labels-name',
         type: 'symbol',
@@ -204,10 +211,17 @@ export function MapView(props: Props) {
         source: 'badges',
         filter: visible,
         paint: {
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 8, 14, 12],
+          // Los contadores de barrio solo aparecen al acercar el zoom, para no tapar el bosque.
+          'circle-radius': [
+            'interpolate', ['linear'], ['zoom'],
+            8, ['case', isBarrio, 0, 8],
+            11, ['case', isBarrio, 0, 9],
+            11.8, ['case', isBarrio, 10, 10],
+            14, 12,
+          ],
           'circle-color': accent,
           'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': 2,
+          'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 11, ['case', isBarrio, 0, 2], 11.8, 2],
           'circle-translate': [0, 14],
         },
       })
@@ -219,7 +233,13 @@ export function MapView(props: Props) {
         layout: {
           'text-field': ['to-string', ['get', 'count']],
           'text-font': ['Noto Sans Bold'],
-          'text-size': ['interpolate', ['linear'], ['zoom'], 8, 10, 14, 13],
+          'text-size': [
+            'interpolate', ['linear'], ['zoom'],
+            8, ['case', isBarrio, 0, 10],
+            11, ['case', isBarrio, 0, 11],
+            11.8, ['case', isBarrio, 11, 11],
+            14, 13,
+          ],
           'text-allow-overlap': true,
         },
         paint: { 'text-color': '#ffffff', 'text-translate': [0, 14] },
@@ -350,6 +370,8 @@ export function MapView(props: Props) {
         { padding: padding(cb.current.bottomInset), animate: false },
       )
       setReady(true)
+      // Cuando el mapa termina de pintar las primeras teselas se quita el aviso de carga.
+      map.once('idle', () => setPainted(true))
     })
 
     return () => {
@@ -494,6 +516,26 @@ export function MapView(props: Props) {
   return (
     <div className="absolute inset-0" role="region" aria-label={props.ariaLabel}>
       <div ref={container} className="h-full w-full" />
+      <AnimatePresence>
+        {!painted && (
+          <motion.div
+            role="status"
+            className="pointer-events-none absolute inset-x-0 top-[28%] flex justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <span className="flex items-center gap-3 rounded-control bg-surface px-4 py-3 text-base font-medium shadow-card">
+              <span
+                className="size-5 animate-spin rounded-full border-2 border-accent border-t-transparent motion-reduce:animate-none"
+                aria-hidden="true"
+              />
+              {props.loadingLabel}
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {tip && (
         <div
           className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[130%] rounded-control bg-ink px-2.5 py-1 text-sm font-medium text-white shadow-card"

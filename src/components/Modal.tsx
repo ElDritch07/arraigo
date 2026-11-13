@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { useEffect, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useT } from '../i18n'
+import { useViewport } from '../state/hooks'
 import { IconButton } from './ui'
 
 interface Props {
@@ -16,6 +17,7 @@ interface Props {
 // Diálogo accesible: el fondo queda inerte (lo marca el Shell), Escape cierra y el foco vuelve a donde estaba.
 export function Modal({ title, onClose, variant = 'sheet', children, hideHeader }: Props) {
   const { t } = useT()
+  const vp = useViewport()
   const panel = useRef<HTMLDivElement>(null)
   const close = useRef(onClose)
   close.current = onClose
@@ -59,7 +61,8 @@ export function Modal({ title, onClose, variant = 'sheet', children, hideHeader 
         aria-modal="true"
         aria-label={title}
         tabIndex={-1}
-        className={`relative flex flex-col overflow-hidden bg-surface shadow-card outline-none ${panelClass}`}
+        className={`relative flex flex-col overflow-hidden bg-surface pb-[env(safe-area-inset-bottom)] shadow-card outline-none ${panelClass}`}
+        style={{ maxHeight: vp.desktop ? undefined : Math.round(vp.height * (variant === 'full' ? 1 : 0.94)) }}
         initial={{ y: '100%', opacity: 0.6 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: '100%', opacity: 0 }}
@@ -73,7 +76,7 @@ export function Modal({ title, onClose, variant = 'sheet', children, hideHeader 
             </IconButton>
           </div>
         )}
-        <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+        <div className="min-h-0 flex-1 touch-pan-y overflow-y-auto overscroll-contain">{children}</div>
       </motion.div>
     </div>,
     root,

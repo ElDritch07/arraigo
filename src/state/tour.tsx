@@ -132,7 +132,10 @@ export function TourProvider({ children }: { children: ReactNode }) {
 
   const start = useCallback(async () => {
     const id = ++runId.current
-    ctx.current.original = lang.code
+    // Desde el enlace de demostración siempre se empieza y se termina en español, aunque una ejecución anterior se cortara a medias.
+    const fromLink = new URLSearchParams(window.location.search).get('demo') === '1'
+    ctx.current.original = fromLink ? 'es' : lang.code
+    if (fromLink) ctx.current.setLang('es')
     setRunning(true)
     setPaused(false)
     setStep(0)
@@ -164,15 +167,24 @@ export function TourProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Sin panel encima: el recorrido se detiene cuando alguien toca la pantalla o pulsa una tecla.
+  // Sin panel encima: el recorrido se detiene con una acción del ratón o del teclado, o con doble toque en el móvil.
   useEffect(() => {
     if (!running) return
-    const halt = () => stop()
-    window.addEventListener('pointerdown', halt, true)
-    window.addEventListener('keydown', halt, true)
+    // Con el ratón o el teclado basta una acción. En pantalla táctil hacen falta dos toques seguidos,
+    // para que un roce al sujetar el móvil no corte la presentación.
+    let lastTouch = 0
+    const onPointer = (e: PointerEvent) => {
+      if (e.pointerType !== 'touch') return stop()
+      const now = Date.now()
+      if (now - lastTouch < 700) stop()
+      lastTouch = now
+    }
+    const onKey = () => stop()
+    window.addEventListener('pointerdown', onPointer, true)
+    window.addEventListener('keydown', onKey, true)
     return () => {
-      window.removeEventListener('pointerdown', halt, true)
-      window.removeEventListener('keydown', halt, true)
+      window.removeEventListener('pointerdown', onPointer, true)
+      window.removeEventListener('keydown', onKey, true)
     }
   }, [running, stop])
 
